@@ -94,13 +94,14 @@ class FilamentResourceGenerate extends Command
         $resourceNamespaces = collect($panel->getResourceNamespaces())->filter(fn ($namespace) => str($namespace)->contains($module->appNamespace()))->values()->toArray();
 
         //Create Directory For Selected Panel in Module If Not Exists
+        //use `rtrim` to ensure no slash doubled
         if(count($resourceDirectories) < 1 && count($resourceNamespaces) < 1){
             $modulePath = module_path($moduleName);
-            if(!File::exists($modulePath . '/'.$appPath . '//Filament/'.Str::studly($panel->getId()))){
-                File::makeDirectory($modulePath . '/'.$appPath . '//Filament/'.Str::studly($panel->getId()));
+            if(!File::exists(rtrim($modulePath, '/') . '/'.rtrim($appPath, '/') . '//Filament/'.Str::studly($panel->getId()))){
+                File::makeDirectory(rtrim($modulePath, '/') . '/'.rtrim($appPath, '/') . '//Filament/'.Str::studly($panel->getId()));
             }
-            if(!File::exists($modulePath . '/'.$appPath . '//Filament/'.Str::studly($panel->getId()).'/Resources')){
-                File::makeDirectory($modulePath . '/'.$appPath . '//Filament/'.Str::studly($panel->getId()).'/Resources');
+            if(!File::exists(rtrim($modulePath, '/')  . '/'.rtrim($appPath, '/') . '//Filament/'.Str::studly($panel->getId()).'/Resources')){
+                File::makeDirectory(rtrim($modulePath, '/')  . '/'.rtrim($appPath, '/') . '//Filament/'.Str::studly($panel->getId()).'/Resources');
             }
             $resourceDirectories[] = $modulePath . '/'.$appPath . '//Filament/'.Str::studly($panel->getId()).'/Resources';
             $resourceNamespaces[] = $module->appNamespace().'\\Filament\\'.Str::studly($panel->getId()).'\\Resources';
